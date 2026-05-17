@@ -1,0 +1,21 @@
+{
+  "updated_at": "（尚未執行 GitHub Actions）",
+  "date_range": "—",
+  "journals": {
+    "JAAD": {
+      "full_name": "Journal of the American Academy of Dermatology",
+      "color": "#1d4ed8",
+      "articles": []
+    },
+    "JAMA Dermatol": {
+      "full_name": "JAMA Dermatology",
+      "color": "#15803d",
+      "articles": []
+    },
+    "JEADV": {
+      "full_name": "Journal of the European Academy of Dermatology and Venereology",
+      "color": "#7c3aed",
+      "articles": []
+    }
+  }
+}
