@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>皮膚科期刊每日精華</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --ink: #1a1612;
+    --ink-muted: #6b6560;
+    --ink-light: #a09a94;
+    --rule: #e8e2d9;
+    --accent-jaad: #1d4ed8;
+    --accent-jama: #15803d;
+    --accent-jeadv: #7c3aed;
+    --warm-sand: #f5f0e8;
+    --serif: 'Playfair Display', 'Noto Serif TC', Georgia, serif;
+    --sans: 'Noto Sans TC', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  /* ── Masthead ── */
+  .masthead {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    border-bottom: 4px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(255,255,255,0.04) 39px,
+      rgba(255,255,255,0.04) 40px
+    );
+    pointer-events: none;
+  }
+  .masthead-overline {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 0.6rem;
+    font-weight: 400;
+  }
+  .masthead h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin-bottom: 0.4rem;
+  }
+  .masthead-sub {
+    font-size: 0.8rem;
+    color: var(--ink-light);
+    letter-spacing: 0.08em;
+  }
+  .masthead-meta {
+    margin-top: 1.4rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-light);
+    flex-wrap: wrap;
+  }
+  .masthead-meta span { display: flex; align-items: center; gap: 0.4rem; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* ── Journal tabs ── */
+  .tabs-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }
+  .tab-btn {
+    padding: 0.85rem 1.8rem;
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--ink-muted);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active {
+    color: var(--ink);
+    border-bottom-color: var(--active-color, var(--ink));
+  }
+  .tab-btn .count-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    background: var(--active-color, var(--ink-light));
+    color: white;
+    border-radius: 10px;
+    padding: 0.05rem 0.4rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    opacity: 0.7;
+  }
+  .tab-btn.active .count-badge { opacity: 1; }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .journal-section { display: none; }
+  .journal-section.active { display: block; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--rule);
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .section-fullname {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    letter-spacing: 0.03em;
+    flex: 1;
+  }
+  .section-count {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  /* ── Article card ── */
+  .article-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    animation: fadeUp 0.4s ease both;
+  }
+  .article-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-accent {
+    height: 3px;
+    background: var(--journal-color, #333);
+  }
+
+  .card-body { padding: 1.4rem 1.6rem; }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.7rem;
+    flex-wrap: wrap;
+  }
+  .journal-pill {
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.18rem 0.6rem;
+    border-radius: 2px;
+    background: var(--journal-color, #333);
+    color: white;
+  }
+  .pub-date {
+    font-size: 0.68rem;
+    color: var(--ink-light);
+    letter-spacing: 0.04em;
+  }
+  .pmid-link {
+    font-size: 0.68rem;
+    color: var(--ink-light);
+    text-decoration: none;
+    margin-left: auto;
+    transition: color 0.2s;
+  }
+  .pmid-link:hover { color: var(--ink); text-decoration: underline; }
+
+  .card-title {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+  .card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .card-title a:hover { text-decoration: underline; text-decoration-color: var(--ink-light); }
+
+  .card-authors {
+    font-size: 0.72rem;
+    color: var(--ink-light);
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  /* Summary */
+  .summary-block {
+    background: var(--warm-sand);
+    border-left: 3px solid var(--journal-color, #333);
+    padding: 1rem 1.2rem;
+    border-radius: 0 2px 2px 0;
+    margin-top: 0.2rem;
+  }
+  .summary-label {
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 0.5rem;
+  }
+  .summary-text {
+    font-size: 0.85rem;
+    line-height: 1.9;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+
+  /* ── Empty / Loading ── */
+  .state-message {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: var(--ink-light);
+  }
+  .state-message .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .state-message p { font-size: 0.9rem; line-height: 1.7; }
+
+  .spinner {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border: 3px solid var(--rule);
+    border-top-color: var(--ink);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.7rem;
+    color: var(--ink-light);
+    border-top: 1px solid var(--rule);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .tab-btn { padding: 0.7rem 0.9rem; font-size: 0.65rem; }
+    .card-body { padding: 1rem 1.1rem; }
+    .card-title { font-size: 0.95rem; }
+    .section-fullname { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="masthead-overline">Dermatology Journal Watch</p>
+  <h1>皮膚科期刊<br><em style="font-style:italic;font-weight:500">每日精華</em></h1>
+  <p class="masthead-sub">JAAD · JAMA Dermatology · JEADV</p>
+  <div class="masthead-meta">
+    <span><span class="dot" style="background:#6b6560"></span><span id="updated-at">載入中…</span></span>
+    <span><span class="dot" style="background:#6b6560"></span><span id="date-range">—</span></span>
+    <span><span class="dot" style="background:#6b6560"></span>AI 中文摘要</span>
+  </div>
+</header>
+
+<nav class="tabs-bar" id="tabs-bar">
+  <!-- tabs injected by JS -->
+</nav>
+
+<main class="container" id="main-content">
+  <div class="state-message">
+    <div class="spinner"></div>
+    <p>正在載入最新期刊文章…</p>
+  </div>
+</main>
+
+<footer>
+  資料來源：PubMed · 摘要由 Claude AI 自動生成，僅供參考，臨床決策請以原文為準。<br>
+  © Dermatology Journal Digest — Powered by GitHub Actions
+</footer>
+
+<script>
+const JOURNAL_COLORS = {
+  'JAAD':        '#1d4ed8',
+  'JAMA Dermatol':'#15803d',
+  'JEADV':       '#7c3aed',
+};
+
+async function loadData() {
+  try {
+    const r = await fetch('data/articles.json?v=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+function renderCard(art, journalName) {
+  const color = JOURNAL_COLORS[journalName] || '#333';
+  const doi = art.doi ? `https://doi.org/${art.doi}` : `https://pubmed.ncbi.nlm.nih.gov/${art.pmid}/`;
+  const summaryHtml = art.summary_zh
+    ? `<div class="summary-block" style="border-left-color:${color}">
+         <div class="summary-label">🔬 中文重點摘要</div>
+         <div class="summary-text">${escHtml(art.summary_zh)}</div>
+       </div>`
+    : '';
+
+  return `
+  <article class="article-card">
+    <div class="card-accent" style="background:${color}"></div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="journal-pill" style="background:${color}">${escHtml(journalName)}</span>
+        <span class="pub-date">${escHtml(art.pub_date)}</span>
+        <a class="pmid-link" href="https://pubmed.ncbi.nlm.nih.gov/${escHtml(art.pmid)}/" target="_blank" rel="noopener">
+          PMID ${escHtml(art.pmid)} ↗
+        </a>
+      </div>
+      <h2 class="card-title">
+        <a href="${escHtml(doi)}" target="_blank" rel="noopener">${escHtml(art.title)}</a>
+      </h2>
+      ${art.authors ? `<p class="card-authors">${escHtml(art.authors)}</p>` : ''}
+      ${summaryHtml}
+    </div>
+  </article>`;
+}
+
+function escHtml(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render(data) {
+  // Update meta
+  document.getElementById('updated-at').textContent = '更新：' + (data.updated_at || '—');
+  document.getElementById('date-range').textContent = data.date_range || '';
+
+  const journals = data.journals || {};
+  const names = Object.keys(journals);
+  if (names.length === 0) {
+    document.getElementById('main-content').innerHTML =
+      '<div class="state-message"><div class="icon">📭</div><p>目前尚無資料，請稍後再試。</p></div>';
+    return;
+  }
+
+  // Build tabs
+  const tabsBar = document.getElementById('tabs-bar');
+  tabsBar.innerHTML = names.map((name, i) => {
+    const color = JOURNAL_COLORS[name] || '#333';
+    const count = (journals[name].articles || []).length;
+    return `<button class="tab-btn ${i===0?'active':''}" 
+              data-tab="${escHtml(name)}"
+              style="--active-color:${color}"
+              onclick="switchTab('${escHtml(name)}')">
+              ${escHtml(name)}<span class="count-badge" style="background:${color}">${count}</span>
+            </button>`;
+  }).join('');
+
+  // Build sections
+  const main = document.getElementById('main-content');
+  main.innerHTML = names.map((name, i) => {
+    const j = journals[name];
+    const articles = j.articles || [];
+    const color = JOURNAL_COLORS[name] || '#333';
+    const cardsHtml = articles.length === 0
+      ? '<div class="state-message"><div class="icon">📄</div><p>近期無新文章。</p></div>'
+      : articles.map(a => renderCard(a, name)).join('');
+    return `<section class="journal-section ${i===0?'active':''}" id="section-${escHtml(name)}">
+      <div class="section-header">
+        <span class="section-title" style="color:${color}">${escHtml(name)}</span>
+        <span class="section-fullname">${escHtml(j.full_name || '')}</span>
+        <span class="section-count">${articles.length} 篇</span>
+      </div>
+      ${cardsHtml}
+    </section>`;
+  }).join('');
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.journal-section').forEach(s => s.classList.toggle('active', s.id === 'section-' + name));
+}
+
+(async () => {
+  const data = await loadData();
+  if (!data) {
+    document.getElementById('main-content').innerHTML =
+      `<div class="state-message">
+        <div class="icon">⚠️</div>
+        <p>無法載入資料。<br>請確認 <code>data/articles.json</code> 已由 GitHub Actions 產生，<br>且 GitHub Pages 已設定正確。</p>
+      </div>`;
+    return;
+  }
+  render(data);
+})();
+</script>
+</body>
+</html>
